@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-patternplate",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Integrate patternplate with eslint",
   "main": "library/index.js",
   "files": [
