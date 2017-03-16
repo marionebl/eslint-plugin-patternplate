@@ -12,7 +12,7 @@
 
 ```shell
 npm install --save-dev eslint \
-  eslint-plugin-patternplate \
+  eslint-plugin-patternplate
 ```
 
 ## Usage
@@ -27,6 +27,12 @@ Make sure to enable the plugin via its rule.
   }
 }
 ```
+
+## See also
+
+* [patternplate](https://github.com/sinnerschrader/patternplate)
+* [eslint](https://github.com/eslint/eslint)
+* [xo](https://github.com/sindresorhus/xo)
 
 ---
 Built by (c) marionebl. Released under the MIT license.
