@@ -42,13 +42,15 @@ function process(text, filename) {
 
 	const dependencySourceNodes = getDependencySourceNodes(ast);
 	var result = text;
+	var offset = 0;
 
 	dependencySourceNodes.forEach(node => {
 		const localName = node.value;
 
 		if (localName === 'Pattern') {
 			const demoGlobalName = extension === '.js' ? './' : `./index${extension}`;
-			result = replaceSource(node, result, demoGlobalName);
+			result = replaceSource(node, result, demoGlobalName, offset);
+			offset += (demoGlobalName.length - localName.length);
 			return;
 		}
 
@@ -62,14 +64,17 @@ function process(text, filename) {
 		const relativePath = path.relative(filename, targetPath);
 		const globalName = relativePath.split(path.sep).slice(1).join('/');
 
-		result = replaceSource(node, result, globalName);
+		result = replaceSource(node, result, globalName, offset);
+		offset += (globalName.length - localName.length);
 	});
 
 	return [result];
 }
 
-function replaceSource(node, text, value) {
-	return `${text.substr(0, node.start + 1)}${value}${text.slice(node.end - 1)}`;
+function replaceSource(node, text, value, offset) {
+	const start = node.start + 1 + offset;
+	const end = node.end - 1 + offset;
+	return `${text.substr(0, start)}${value}${text.slice(end)}`;
 }
 
 function getPatternRoot(file) {
