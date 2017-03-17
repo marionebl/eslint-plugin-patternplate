@@ -202,6 +202,19 @@ test('should respect source extension for demo pattern reference', async t => {
 	t.is(actual, expected);
 });
 
+test('should bail out for invalid js', async t => {
+	const code = stripIndent`
+		const foo bar"foo
+	`;
+
+	const expected = stripIndent`
+		const foo bar"foo
+	`;
+
+	const [actual] = process(code, neutral`fixtures/pattern/patterns/a/demo.js`);
+	t.is(actual, expected);
+});
+
 function neutral(strings) {
 	return strings
 		.map(string => string.replace(/\//g, path.sep))
