@@ -1,8 +1,9 @@
 import path from 'path';
 import traverse from 'babel-traverse';
-import {parse} from 'babylon';
 import {sync as json} from 'load-json-file';
 import {sync as exists} from 'path-exists';
+
+import parse from './parse';
 
 export default process;
 
@@ -24,21 +25,17 @@ function process(text, filename) {
 		return [text];
 	}
 
-	const ast = parse(text, {
-		sourceType: 'module',
-		plugins: [
-			'estree',
-			'jsx',
-			'flow',
-			'doExpressions',
-			'objectRestSpread',
-			'classProperties',
-			'exportExtensions',
-			'asyncGenerators',
-			'functionBind',
-			'functionSent'
-		]
-	});
+	const [err, ast] = parse(text);
+
+	// let eslint handle invalid js
+	if (err && err.loc) {
+		return [text];
+	}
+
+	// throw other errors
+	if (err && !err.loc) {
+		return err;
+	}
 
 	const dependencySourceNodes = getDependencySourceNodes(ast);
 	var result = text;
